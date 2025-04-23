@@ -1,14 +1,5 @@
-from re import S
-from urllib import response
-
-import botocore
-import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
-
-from files_api.main import create_app
-from files_api.settings import Settings
-from tests.consts import TEST_BUCKET_NAME
 
 # from src.files_api.main import app
 
@@ -17,8 +8,7 @@ TEST_FILE_CONTENT = b"test content2"
 TEST_FILE_CONTENT_TYPE = "text/plain"
 
 
-def test_upload_file(client: TestClient): 
-    
+def test_upload_file(client: TestClient):
     response = client.put(
         f"/files/{TEST_FILE_PATH}",
         files={"file": (TEST_FILE_PATH, TEST_FILE_CONTENT, TEST_FILE_CONTENT_TYPE)},
@@ -45,6 +35,7 @@ def test_upload_file(client: TestClient):
 
 
 # update an existing file
+
 
 def test_list_files_with_pagination(client: TestClient):
     # Upload multiple files to test pagination
@@ -95,15 +86,17 @@ def test_get_file(client: TestClient):
     assert TEST_FILE_CONTENT_TYPE in response2.headers["Content-Type"]
 
 
-def test_delete_file(client: TestClient): 
+def test_delete_file(client: TestClient):
     # upload a file
-    response = client.put(f'/files/dummy_file.txt', files = {"file": ("dummy_file.txt", b"to be deleted", TEST_FILE_CONTENT_TYPE)},)
+    response = client.put(
+        "/files/dummy_file.txt",
+        files={"file": ("dummy_file.txt", b"to be deleted", TEST_FILE_CONTENT_TYPE)},
+    )
     assert response.status_code == status.HTTP_201_CREATED
-    
+
     # delete the file
     response = client.delete(("files/dummy_file.txt"))
     assert response.status_code == status.HTTP_204_NO_CONTENT
-    
-    response = client.get(f"/files/dummy_file.txt")
+
+    response = client.get("/files/dummy_file.txt")
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    

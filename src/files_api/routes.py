@@ -1,4 +1,3 @@
-
 from fastapi import (
     APIRouter,
     Depends,
@@ -63,9 +62,6 @@ async def list_files(
     query_params: GetFilesQueryParams = Depends(),
 ) -> GetFilesResponse:
     """List files with pagination."""
-    raise Exception(
-        "This is an unseen error. Please contact the administrator.",
-    )
     settings: Settings = request.app.state.settings
     if query_params.page_token:
         files, next_page_token = fetch_s3_objects_using_page_token(
@@ -158,7 +154,8 @@ async def delete_file(
 ) -> Response:
     """Delete a file.
 
-    NOTE: DELETE requests MUST NOT return a body in the response."""
+    NOTE: DELETE requests MUST NOT return a body in the response.
+    """
     settings = request.app.state.settings
 
     object_exists = object_exists_in_s3(bucket_name=settings.s3_bucket_name, object_key=file_path)

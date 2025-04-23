@@ -9,7 +9,14 @@ authors = [{ name = "<your name>", email = "some-email@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.7"
 license = { text = "MIT" }
-dependencies = ["boto3", "fastapi", "pydantic-settings", "openai", "requests"]
+dependencies = [
+    "boto3",
+    "fastapi",
+    "pydantic-settings",
+    "openai",
+    "requests",
+    "python-multipart",
+]
 classifiers = ["Programming Language :: Python :: 3"]
 keywords = ["one", "two"]
 
@@ -92,4 +99,37 @@ disable = [
     "import-error",
     "too-few-public-methods",
     "redefined-outer-name",
+]
+
+# https://github.com/astral-sh/ruff?tab=readme-ov-file#configuration
+[tool.ruff]
+line-length = 119
+
+# https://docs.astral.sh/ruff/rules/
+[tool.ruff.lint]
+extend-select = [
+    # pycodestyle errors
+    "E",
+    # flake8-bugbear
+    "B",
+    # pylint equivalent rules
+    "PL",
+    # isort
+    "I",
+    # pydocstyle for docstrings
+    "D",
+    # pep8-naming
+    "N",
+]
+
+ignore = [
+    "D107", # Missing docstring in `__init__`
+    "E501", # Line too long
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+    "D103", # Missing docstring in public function
+    # Magic value used in comparison, consider replacing `4` with a constant variable -- Is problem for tests
+    "PLR2004",
+    # `with` statement variable `tmp_dir` overwritten by assignment target, eg: tests/unit_tests/components/metaflow_project/test__metaflow_project_.py:17:9
+    "PLW2901",
 ]
