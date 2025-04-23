@@ -21,7 +21,7 @@ from responses import delete
 
 from files_api.errors import (
     handle_broad_exceptions,
-    handle_pydanic_validation_errors,
+    handle_pydantic_validation_errors,
 )
 from files_api.routes import ROUTER
 from files_api.s3.delete_objects import delete_s3_object
@@ -45,10 +45,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
     
     app.include_router(ROUTER)
-    app.add_exception_handler(
-        exc_class_or_status_code=pydantic.ValidationError,
-        handler=handle_pydanic_validation_errors,
-    )
+    # app.add_exception_handler(
+    #     exc_class_or_status_code=pydantic.ValidationError,
+    #     handler=handle_pydantic_validation_errors,
+    # )
     app.middleware("http")(handle_broad_exceptions)
     
     return app

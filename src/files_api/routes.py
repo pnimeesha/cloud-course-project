@@ -63,6 +63,9 @@ async def list_files(
     query_params: GetFilesQueryParams = Depends(),
 ) -> GetFilesResponse:
     """List files with pagination."""
+    raise Exception(
+        "This is an unseen error. Please contact the administrator.",
+    )
     settings: Settings = request.app.state.settings
     if query_params.page_token:
         files, next_page_token = fetch_s3_objects_using_page_token(
