@@ -17,8 +17,7 @@ def upload_s3_object(
     content_type: Optional[str] = None,
     s3_client: Optional["S3Client"] = None,
 ) -> None:
-    """
-    Upload a file to an S3 bucket.
+    """Upload a file to an S3 bucket.
 
     :param bucket_name: The name of the S3 bucket.
     :param object_key: path to the object in the S3 bucket.

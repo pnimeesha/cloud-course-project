@@ -4,8 +4,6 @@ from typing import Optional
 
 import boto3
 
-from files_api import s3
-
 try:
     from mypy_boto3_s3 import S3Client
     from mypy_boto3_s3.type_defs import (
@@ -19,8 +17,7 @@ DEFAULT_MAX_KEYS = 1_000
 
 
 def object_exists_in_s3(bucket_name: str, object_key: str, s3_client: Optional["S3Client"] = None) -> bool:
-    """
-    Check if an object exists in the S3 bucket using head_object.
+    """Check if an object exists in the S3 bucket using head_object.
 
     :param bucket_name: Name of the S3 bucket.
     :param object_key: Key of the object to check.
@@ -44,8 +41,7 @@ def fetch_s3_object(
     object_key: str,
     s3_client: Optional["S3Client"] = None,
 ) -> "GetObjectOutputTypeDef":
-    """
-    Fetch metadata of an object in the S3 bucket.
+    """Fetch metadata of an object in the S3 bucket.
 
     :param bucket_name: Name of the S3 bucket.
     :param object_key: Key of the object to fetch.
@@ -53,10 +49,10 @@ def fetch_s3_object(
 
     :return: Metadata of the object.
     """
-    
-    s3_client  = s3_client or boto3.client("s3")
+    s3_client = s3_client or boto3.client("s3")
     response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
     return response
+
 
 def fetch_s3_objects_using_page_token(
     bucket_name: str,
@@ -64,8 +60,7 @@ def fetch_s3_objects_using_page_token(
     max_keys: int | None = None,
     s3_client: Optional["S3Client"] = None,
 ) -> tuple[list["ObjectTypeDef"], Optional[str]]:
-    """
-    Fetch list of object keys and their metadata using a continuation token.
+    """Fetch list of object keys and their metadata using a continuation token.
 
     :param bucket_name: Name of the S3 bucket to list objects from.
     :param continuation_token: Token for fetching the next page of results where the last page left off.
@@ -83,10 +78,10 @@ def fetch_s3_objects_using_page_token(
         ContinuationToken=continuation_token,
         MaxKeys=max_keys,
     )
-    
+
     files: list["ObjectTypeDef"] = response.get("Contents", [])
     next_continuation_token: str | None = response.get("NextContinuationToken")
-    
+
     return files, next_continuation_token
 
 
@@ -96,8 +91,7 @@ def fetch_s3_objects_metadata(
     max_keys: Optional[int] = DEFAULT_MAX_KEYS,
     s3_client: Optional["S3Client"] = None,
 ) -> tuple[list["ObjectTypeDef"], Optional[str]]:
-    """
-    Fetch list of object keys and their metadata.
+    """Fetch list of object keys and their metadata.
 
     :param bucket_name: Name of the S3 bucket to list objects from.
     :param prefix: Prefix to filter objects by.
@@ -114,8 +108,8 @@ def fetch_s3_objects_metadata(
         Bucket=bucket_name,
         Prefix=prefix or "",
         MaxKeys=max_keys,
-    )   
+    )
     files: list["ObjectTypeDef"] = response.get("Contents", [])
     next_page_token: str | None = response.get("NextContinuationToken")
-    
+
     return files, next_page_token

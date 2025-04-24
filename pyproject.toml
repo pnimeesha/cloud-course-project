@@ -29,7 +29,10 @@ version = { file = "version.txt" }
 
 # optional dependencies can be installed with square brackets, e.g. `pip install my-package[test,static-code-qa]`
 [project.optional-dependencies]
-test = ["pytest", "pytest-cov", "pytest-asyncio", "moto[server]"]
+api = ["uvicorn", "moto[server]"]
+stubs = ["boto3-stubs[s3]"]
+notebooks = ["jupyterlab", "ipykernel", "rich"]
+test = ["pytest", "pytest-cov", "moto[s3]"]
 release = ["build", "twine"]
 static-code-qa = [
     "pre-commit",
@@ -41,12 +44,12 @@ static-code-qa = [
     "Flake8-pyproject",
     "radon",
 ]
-# Installing dev depenendencies in your virtual env makes it so that during development VS Code can 
+# Installing dev depenendencies in your virtual env makes it so that during development VS Code can
 # - surface linting errors
 # - automatically apply formatting
 # - show enhanced autocompletion for stubs libraries
 # See .vscode/settings.json to see how VS Code is configured to use these tools
-dev = ["cloud-course-project[test,release,static-code-qa]"]
+dev = ["cloud-course-project[test,release,static-code-qa,stubs,notebooks,api]"]
 
 [build-system]
 # Minimum requirements for the build system to execute.

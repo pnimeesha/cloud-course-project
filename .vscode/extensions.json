@@ -15,6 +15,7 @@
         // google-docs-like real-time collaboration
         "ms-vsliveshare.vsliveshare",
         // file support: justfile, markdown/mermaid, toml, yaml, jinja
+        "skellock.just",
         "yzhang.markdown-all-in-one",
         "bierner.markdown-mermaid",
         "tamasfe.even-better-toml",
@@ -29,11 +30,9 @@
         "github.vscode-github-actions",
         "GitHub.copilot",
         "GitHub.copilot-labs",
-        // Ctrl+Alt+V / Cmd+Alt+V paste image from clipboard into markdown files
+        // Ctrl+Alt+V / Cmd+Alt+V paste image from clipboard
         "mushan.vscode-paste-image",
         // autocompletion for file paths
         "christian-kohler.path-intellisense",
-        // jump to definition of pytest fixtures, e.g. with Ctrl+Click / Cmd+Click
-        "nickmillerdev.pytest-fixtures",
     ]
 }
