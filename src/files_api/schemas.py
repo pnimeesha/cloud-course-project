@@ -8,21 +8,11 @@ from typing import (
 from fastapi.responses import StreamingResponse
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
     model_validator,
 )
 from typing_extensions import Self
-
-# from responses import delete
-
-# from files_api.s3.delete_objects import delete_s3_object
-# from files_api.s3.read_objects import (
-#     fetch_s3_object,
-#     fetch_s3_objects_metadata,
-#     fetch_s3_objects_using_page_token,
-#     object_exists_in_s3,
-# )
-# from files_api.s3.write_objects import upload_s3_object
 
 # constants
 DEFAULT_GET_FILES_PAGE_SIZE = 10
@@ -37,24 +27,59 @@ DEFAULT_GET_FILES_DIRECTORY = ""
 
 # read (cRud)
 class FileMetadata(BaseModel):
-    file_path: str
-    last_modified: datetime
-    size_bytes: int
+    """Metadata of a file."""
+
+    file_path: str = Field(
+        description="The path of the file.",
+        json_schema_extra={"example": "path/to/pyproject.toml"},
+    )
+    last_modified: datetime = Field(description="The last modified date of the file.")
+    size_bytes: int = Field(description="The size of the file in bytes.")
 
 # read (cRud)
 class GetFilesResponse(BaseModel):
+    """Response model for `GET /v1/files`."""
+
     files: List[FileMetadata]
     next_page_token: Optional[str]
+
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "files": [
+                    {
+                        "file_path": "path/to/pyproject.toml",
+                        "last_modified": "2022-01-01T00:00:00Z",
+                        "size_bytes": 512,
+                    },
+                    {
+                        "file_path": "path/to/Makefile",
+                        "last_modified": "2022-01-01T00:00:00Z",
+                        "size_bytes": 256,
+                    },
+                ],
+                "next_page_token": "next_page_token_example",
+            }
+        }
+    )
  
 # read (cRud)   
 class GetFilesQueryParams(BaseModel):
+    """Query parameters for `GET /v1/files`."""
+    
     page_size: int = Field(
         default=DEFAULT_GET_FILES_PAGE_SIZE, 
         ge=DEFAULT_GET_FILES_MIN_PAGE_SIZE, 
         le=DEFAULT_GET_FILES_MAX_PAGE_SIZE)
     
-    directory: Optional[str] = DEFAULT_GET_FILES_DIRECTORY
-    page_token: Optional[str] = None
+    directory: str = Field(
+        DEFAULT_GET_FILES_DIRECTORY,
+        description="The directory to list files from.",
+    )
+    page_token: Optional[str] = Field(
+        None,
+        description="The token for the next page.",
+    )
 
     @model_validator(mode='after')
     def check_passwords_match(self) -> Self:
@@ -68,6 +93,8 @@ class GetFilesQueryParams(BaseModel):
 
 # delete (cruD)
 class DeleteFileResponse(BaseModel):
+    """Response model for `DELETE /v1/files/:file_path`."""
+
     message: str
     
 # create.update (Crud)
@@ -75,5 +102,10 @@ class DeleteFileResponse(BaseModel):
 # because we need to return a response with the file path and message
 # when we upload a file
 class PutFileResponse(BaseModel):
-    file_path: str
-    message: str
+    """Response model for `PUT /v1/files/:file_path`."""
+
+    file_path: str = Field(
+        description="The path of the file.",
+        json_schema_extra={"example": "path/to/pyproject.toml"},
+    )
+    message: str = Field(description="A message about the operation.")

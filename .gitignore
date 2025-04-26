@@ -176,3 +176,5 @@ dist
 *cache*
 
 files-api-sdk/
+files-api-sdk-old/
+.venv-sdk

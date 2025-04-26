@@ -25,15 +25,21 @@ from files_api.schemas import (
 )
 from files_api.settings import Settings
 
-ROUTER = APIRouter()
+ROUTER = APIRouter(tags=["Files"])
 
 
-@ROUTER.put("/v1/files/{file_path:path}")
-async def upload_file(request: Request, file_path: str, file: UploadFile, response: Response) -> PutFileResponse:
+@ROUTER.put(
+    "/v1/files/{file_path:path}",
+    responses={
+        status.HTTP_200_OK: {"model": PutFileResponse},
+        status.HTTP_201_CREATED: {"model": PutFileResponse},
+    },
+)
+async def upload_file(request: Request, file_path: str, file_content: UploadFile, response: Response) -> PutFileResponse:
     """Upload a file."""
     settings: Settings = request.app.state.settings
 
-    file_contents: bytes = await file.read()
+    file_contents: bytes = await file_content.read()
     object_already_exists = object_exists_in_s3(settings.s3_bucket_name, object_key=file_path)
 
     if object_already_exists:
@@ -47,7 +53,7 @@ async def upload_file(request: Request, file_path: str, file: UploadFile, respon
         bucket_name=settings.s3_bucket_name,
         object_key=file_path,
         file_content=file_contents,
-        content_type=file.content_type,
+        content_type=file_content.content_type,
     )
 
     return PutFileResponse(

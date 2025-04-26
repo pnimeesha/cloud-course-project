@@ -7,6 +7,18 @@
 build:
 	bash run.sh build
 
+generate-client-library:
+	bash run.sh generate-client-library
+
+install-generated-sdk:
+	bash run.sh install-generated-sdk
+	
+run:
+	bash run.sh run
+
+run-mock:
+	bash run.sh run-mock
+
 clean:
 	bash run.sh clean
 
