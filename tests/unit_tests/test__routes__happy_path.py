@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 
 # from src.files_api.main import app
 
-TEST_FILE_PATH = "some/nested/file2.txt"
+TEST_FILE_PATH = "/home/nimee/repos/cloud-course-project/tests/dummy_test.txt"
 TEST_FILE_CONTENT = b"test content2"
 TEST_FILE_CONTENT_TYPE = "text/plain"
 
@@ -95,7 +95,7 @@ def test_delete_file(client: TestClient):
     assert response.status_code == status.HTTP_201_CREATED
 
     # delete the file
-    response = client.delete(("files/dummy_file.txt"))
+    response = client.delete(("/v1/files/dummy_file.txt"))
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
     response = client.get("/v1/files/dummy_file.txt")
