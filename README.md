@@ -32,3 +32,13 @@ make install
 # run the tests
 make test
 ```
+
+## Following are implemented
+- boto3
+- testing boto3 (moto)
+- testing rest api happy path endpoints
+- creating app design pattern using 12-factor app (https://12factor.net/)
+- error handling and data validation
+- API contracts and docs
+  
+  
